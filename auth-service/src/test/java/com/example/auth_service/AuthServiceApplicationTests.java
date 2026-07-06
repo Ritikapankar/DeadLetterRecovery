@@ -1,10 +1,10 @@
-package com.example.DeadLetterRecovery;
+package com.example.auth_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DeadLetterRecoveryApplicationTests {
+class AuthServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
