@@ -1,12 +1,11 @@
 package com.example.job_serivce.controller;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.example.job_serivce.dto.CreateJobRequest;
 import com.example.job_serivce.dto.JobResponse;
@@ -18,20 +17,41 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/jobs")
 @RequiredArgsConstructor
 public class JobController {
-    
-    private final JobService jobservice;
 
+    private final JobService jobService;
+
+    // Create Job
     @PostMapping
     public ResponseEntity<JobResponse> createJob(
-        @Valid @RequestBody CreateJobRequest request) {
-        JobResponse response = jobservice.createJob(request);
-       
+            @RequestBody CreateJobRequest request) {
+
+        JobResponse response = jobService.createJob(request);
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-      
-    // @GetMapping
-    // public ResponseEntity<JobResponse> getAllJob(){
 
-    //     return new ResponseEntity<JobResponse>(jobservice.getAllJobs());
-    // }
+    // Get All Jobs
+    @GetMapping
+    public ResponseEntity<List<JobResponse>> getAllJobs() {
+
+        return ResponseEntity.ok(jobService.getAllJobs());
+    }
+
+    // Get Job By Id
+    @GetMapping("/{id}")
+    public ResponseEntity<JobResponse> getJobById(
+            @PathVariable UUID id) {
+
+        return ResponseEntity.ok(jobService.getJobById(id));
+    }
+
+    // Delete Job
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteJob(
+            @PathVariable UUID id) {
+
+        jobService.deleteJob(id);
+
+        return ResponseEntity.ok("Job deleted successfully.");
+    }
 }

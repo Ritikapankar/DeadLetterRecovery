@@ -8,12 +8,11 @@ import com.example.job_serivce.dto.JobResponse;
 
 public interface JobService {
 
-    JobResponse createJob(CreateJobRequest createJobRequest);
+    JobResponse createJob(CreateJobRequest request);
 
     List<JobResponse> getAllJobs();
 
-    JobResponse getJobById(UUID jobId);
+    JobResponse getJobById(UUID id);
 
-    void deleteJob(UUID jobId);
-    
+    void deleteJob(UUID id);
 }

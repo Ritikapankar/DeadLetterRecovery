@@ -5,10 +5,10 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
-import com.example.job_serivce.dto.CreateJobRequest;
-import com.example.job_serivce.dto.JobResponse;
-import com.example.job_serivce.entity.Job;
-import com.example.job_serivce.repository.JobRepository;
+import com.example.job_serivce.dto.*;
+import com.example.job_serivce.entity.*;
+import com.example.job_serivce.exception.*;
+import com.example.job_serivce.repository.*;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,53 +16,60 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JobServiceImpl implements JobService {
 
- 
-  private final JobRepository jobRepository;
+    private final JobRepository jobRepository;
 
-  @Override
-  public JobResponse createJob(CreateJobRequest createJobRequest) {
-     Job job = Job.builder()
-     .jobType(createJobRequest.getJobType())
-     .payload(createJobRequest.getPayload())
-     .priority(createJobRequest.getPriority())
-     .build();
+    @Override
+    public JobResponse createJob(CreateJobRequest request) {
 
-     Job savedJob = jobRepository.save(job);
-     return mapToResponse(savedJob);
-  }
+        Job job = Job.builder()
+                .jobType(request.getJobType())
+                .payload(request.getPayload())
+                .priority(request.getPriority())
+                .status(JobStatus.QUEUED)
+                .build();
 
+        Job savedJob = jobRepository.save(job);
 
-  @Override
-public List<JobResponse> getAllJobs() {
-    List<Job> jobs = jobRepository.findAll();
-    return jobs.stream()
-            .map(this::mapToResponse)
-            .toList();
-}
+        return mapToResponse(savedJob);
+    }
 
-  @Override
-  public JobResponse getJobById(UUID jobId) {
-    Job job = jobRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Job not found"));
-    return mapToResponse(job);
-  }
+    @Override
+    public List<JobResponse> getAllJobs() {
 
-  @Override
-  public void deleteJob(UUID jobId) {
-    Job job = jobRepository.findById(jobId).orElseThrow(() -> new RuntimeException("Job not found"));
-    jobRepository.delete(job);
-  }
+        return jobRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
 
-  private JobResponse mapToResponse(Job job){
-    return JobResponse.builder()
-    .id(job.getId())
-    .jobType(job.getJobType())
-    .payload(job.getPayload())
-    .status(job.getStatus())
-    .priority(job.getPriority())
-    .createdAt(job.getCreatedAt())
-    .updatedAt(job.getUpdatedAt())
-    .build();
-    
-  }  
+    @Override
+    public JobResponse getJobById(UUID id) {
 
+        Job job = jobRepository.findById(id)
+                .orElseThrow(() -> new JobNotFoundException("Job not found with id : " + id));
+
+        return mapToResponse(job);
+    }
+
+    @Override
+    public void deleteJob(UUID id) {
+
+        Job job = jobRepository.findById(id)
+                .orElseThrow(() -> new JobNotFoundException("Job not found with id : " + id));
+
+        jobRepository.delete(job);
+    }
+
+    private JobResponse mapToResponse(Job job) {
+
+        return JobResponse.builder()
+                .id(job.getId())
+                .jobType(job.getJobType())
+                .payload(job.getPayload())
+                .status(job.getStatus())
+                .priority(job.getPriority())
+                .createdAt(job.getCreatedAt())
+                .updatedAt(job.getUpdatedAt())
+                .build();
+    }
 }
