@@ -1,4 +1,4 @@
-package main.java.com.example.worker_service.dto;
+package com.example.worker_service.dto;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -10,7 +10,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "jobs")
+@Table(name = "jobs", indexes = {
+        @Index(name = "idx_job_status", columnList = "status"),
+        @Index(name = "idx_job_priority", columnList = "priority")
+})
 @Data
 @Builder
 @NoArgsConstructor
@@ -41,6 +44,14 @@ public class Job {
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+     @Builder.Default
+     private int retryCount = 0;
+
+     @Builder.Default
+        private int maxRetries = 3;
+
+    private String failureReason;    
 
     @PrePersist
     public void prePersist() {

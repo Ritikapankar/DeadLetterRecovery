@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.job_serivce.dto.CreateJobRequest;
 import com.example.job_serivce.dto.JobResponse;
+import com.example.job_serivce.entity.JobStatus;
 import com.example.job_serivce.service.JobService;
 
 import lombok.RequiredArgsConstructor;
@@ -45,6 +46,23 @@ public class JobController {
         return ResponseEntity.ok(jobService.getJobById(id));
     }
 
+    // Get Jobs By Status
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<JobResponse>> getJobsByStatus(
+            @PathVariable JobStatus status) {
+
+        return ResponseEntity.ok(jobService.getJobsByStatus(status));
+    }
+
+    // Update Job Status
+    @PutMapping("/{id}/status/{status}")
+    public ResponseEntity<JobResponse> updateJobStatus(
+            @PathVariable UUID id,
+            @PathVariable JobStatus status) {
+
+        return ResponseEntity.ok(jobService.updateJobStatus(id, status));
+    }
+
     // Delete Job
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteJob(
@@ -53,5 +71,14 @@ public class JobController {
         jobService.deleteJob(id);
 
         return ResponseEntity.ok("Job deleted successfully.");
+    }
+
+    @PutMapping("/{id}/retry")
+    public ResponseEntity<String> retryJob(
+            @PathVariable UUID id,
+            @RequestParam String failureReason) {
+
+        jobService.retryJob(id, failureReason);
+        return ResponseEntity.ok("Job retry successfully");
     }
 }

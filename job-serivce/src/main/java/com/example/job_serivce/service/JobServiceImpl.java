@@ -52,12 +52,48 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    public List<JobResponse> getJobsByStatus(JobStatus status) {
+
+        return jobRepository.findByStatus(status)
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    @Override
+    public JobResponse updateJobStatus(UUID id, JobStatus status) {
+
+        Job job = jobRepository.findById(id)
+                .orElseThrow(() -> new JobNotFoundException("Job not found with id : " + id));
+
+        job.setStatus(status);
+        Job updatedJob = jobRepository.save(job);
+
+        return mapToResponse(updatedJob);
+    }
+
+    @Override
     public void deleteJob(UUID id) {
 
         Job job = jobRepository.findById(id)
                 .orElseThrow(() -> new JobNotFoundException("Job not found with id : " + id));
 
         jobRepository.delete(job);
+    }
+
+     @override
+    public void retryJob(UUID id, String failureReason) {
+        Job job = jobRepository.findById(id)
+                .orElseThrow(() -> new JobNotFoundException("Job not found with id : " + id));
+
+     job.setRetryCount(job.getRetryCount() + 1);
+     job.setFailureReason(failureReason);
+
+     if(job.getRetryCount() >= job.getMaxRetries()) {
+         job.setStatus(JobStatus.FAILED);
+     } else {
+         job.setStatus(JobStatus.QUEUED);
+     }
     }
 
     private JobResponse mapToResponse(Job job) {
@@ -68,8 +104,12 @@ public class JobServiceImpl implements JobService {
                 .payload(job.getPayload())
                 .status(job.getStatus())
                 .priority(job.getPriority())
+                .retryCount(job.getRetryCount())
+                .maxRetries(job.getMaxRetries())
+                .failureReason(job.getFailureReason())
                 .createdAt(job.getCreatedAt())
                 .updatedAt(job.getUpdatedAt())
+                
                 .build();
     }
 }

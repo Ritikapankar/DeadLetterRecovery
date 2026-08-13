@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.example.job_serivce.dto.CreateJobRequest;
 import com.example.job_serivce.dto.JobResponse;
+import com.example.job_serivce.entity.JobStatus;
 
 public interface JobService {
 
@@ -14,5 +15,11 @@ public interface JobService {
 
     JobResponse getJobById(UUID id);
 
+    List<JobResponse> getJobsByStatus(JobStatus status);
+
+    JobResponse updateJobStatus(UUID id, JobStatus status);
+
     void deleteJob(UUID id);
+
+    void retryJob(UUID id, String failureReason);
 }

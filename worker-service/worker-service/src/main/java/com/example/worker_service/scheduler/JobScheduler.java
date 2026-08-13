@@ -1,12 +1,9 @@
-package main.java.com.example.worker_service.scheduler;
-
-
+package com.example.worker_service.scheduler;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import com.deadletter.workerservice.service.WorkerService;
-
 import lombok.RequiredArgsConstructor;
+import com.example.worker_service.service.WorkerService;
+
 @Component
 @RequiredArgsConstructor
 public class JobScheduler {

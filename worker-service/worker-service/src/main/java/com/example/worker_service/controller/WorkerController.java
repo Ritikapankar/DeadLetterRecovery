@@ -1,9 +1,9 @@
-package main.java.com.example.worker_service.controller;
+package com.example.worker_service.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.deadletter.workerservice.service.WorkerService;
+import com.example.worker_service.service.WorkerService;
 
 import lombok.RequiredArgsConstructor;
 

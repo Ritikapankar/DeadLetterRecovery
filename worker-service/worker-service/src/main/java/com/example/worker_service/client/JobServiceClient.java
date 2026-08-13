@@ -1,4 +1,4 @@
-package main.java.com.example.worker_service.client;
+package com.example.worker_service.client;
 
 import java.util.List;
 import java.util.UUID;
@@ -7,12 +7,12 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-
-import com.deadletter.workerservice.dto.JobResponse;
+import org.springframework.web.bind.annotation.RequestParam;
+import com.example.worker_service.dto.JobResponse;
 
 @FeignClient(
         name = "job-service",
-        url = "http://localhost:8081"
+        url = "http://localhost:8080"
 )
 public interface JobServiceClient {
 
@@ -27,5 +27,8 @@ public interface JobServiceClient {
 
     @PutMapping("/jobs/{id}/status/FAILED")
     void markFailed(@PathVariable UUID id);
+ 
+     @PutMapping("/jobs/{id}/retry")
+    void retryJob(@PathVariable UUID id, @RequestParam String failureReason);
 
 }

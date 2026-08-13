@@ -30,4 +30,10 @@ public class JobResponse {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private int retryCount;
+
+    private int maxRetries;
+
+    private String failureReason;
 }
