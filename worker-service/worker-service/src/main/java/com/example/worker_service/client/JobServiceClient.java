@@ -20,15 +20,15 @@ public interface JobServiceClient {
     List<JobResponse> getQueuedJobs();
 
     @PutMapping("/jobs/{id}/status/PROCESSING")
-    void markProcessing(@PathVariable UUID id);
+    void markProcessing(@PathVariable("id") UUID id);
 
     @PutMapping("/jobs/{id}/status/COMPLETED")
-    void markCompleted(@PathVariable UUID id);
+    void markCompleted(@PathVariable("id") UUID id);
 
     @PutMapping("/jobs/{id}/status/FAILED")
-    void markFailed(@PathVariable UUID id);
+    void markFailed(@PathVariable("id") UUID id);
  
      @PutMapping("/jobs/{id}/retry")
-    void retryJob(@PathVariable UUID id, @RequestParam String failureReason);
+    void retryJob(@PathVariable("id") UUID id, @RequestParam("failureReason") String failureReason);
 
 }

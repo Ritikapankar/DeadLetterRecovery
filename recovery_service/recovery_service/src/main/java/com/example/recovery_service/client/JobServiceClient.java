@@ -17,7 +17,7 @@ public interface JobServiceClient {
     List<JobResponse> getFailedJobs();
 
     @PutMapping("/jobs/{id}/retry")
-    void retryJob(@PathVariable UUID id, @RequestParam String failureReason);
+    void retryJob(@PathVariable("id") UUID id, @RequestParam("failureReason") String failureReason);
 
 
 }
