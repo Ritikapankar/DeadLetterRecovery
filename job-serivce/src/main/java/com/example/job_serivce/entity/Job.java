@@ -49,7 +49,7 @@ public class Job {
      private int retryCount = 0;
 
      @Builder.Default
-        private int maxRetries = 3;
+        private Integer maxRetries = 3;
 
     private String failureReason;    
 

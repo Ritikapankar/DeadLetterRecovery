@@ -8,13 +8,15 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="worker-service" />
+        <module name="recovery-service" />
         <module name="auth-service" />
       </profile>
-      <profile name="Annotation profile for job-serivce" enabled="true">
+      <profile name="Annotation profile for Dead Letter Recovery Parent" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="job-serivce" />
@@ -25,6 +27,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auth-service" options="-parameters" />
       <module name="job-serivce" options="-parameters" />
+      <module name="recovery-service" options="-parameters" />
       <module name="worker-service" options="-parameters" />
     </option>
   </component>
